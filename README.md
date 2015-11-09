@@ -9,11 +9,17 @@ Bmob Js SDK
 
 这个Repo中主要包含了`bmob.js`和`bmobSocketIo.js`两个文件和对应的压缩版。其中，`bmob.js`实现了数据服务、文件服务（包含图片服务）、用户服务、推送服务、云端代码、ACL和角色管理等功能，`bmobSocketIo.js`实现了实时数据的同步服务。
 
+目录"test"是测试文件。
+
+目录"doc_faststart"是快速入门文档。
+
+目录"doc_develop"是详细开发文档。
+
 
 # Bmob官方信息
 
 官方网址：[http://www.bmob.cn](http://www.bmob.cn)
 
-问答社区：[http://wenda.bmob.cn](http://wenda.bmob.cn)
+社区：[http://community.bmob.cn/forum.php](http://community.bmob.cn/forum.php)
 
 技术邮箱：support@bmob.cn

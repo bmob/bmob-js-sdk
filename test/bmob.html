@@ -1,0 +1,891 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+
+  <title>My Parse App</title>
+  <meta name="description" content="My Parse App">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="text/javascript" src="jquery.min.js"></script>
+
+  <script type="text/javascript" src="../bmob.js"></script>
+
+
+</head>
+
+<body>
+  
+  <div id="main">
+    <h1>You're ready to use Bmob!</h1>
+
+    <p>Read the documentation and start building your JavaScript app:</p>
+
+
+
+    <div style="display:none" class="error">
+      Looks like there was a problem saving the test object. Make sure you've set your application ID and REST API Key correctly in the call to <code>Bmob.initialize</code> in this file.
+    </div>
+
+    <div style="display:none" class="success">
+      <p>We've also just created your first object using the following code:</p>
+      
+        <code>
+          var TestObject = Bmob.Object.extend("TestObject");<br/>
+          var testObject = new TestObject();<br/>
+          testObject.save({foo: "bar"});
+        </code>
+    </div>
+  </div>
+
+  <div id="pay_content">
+
+  </div>
+
+  <input type="file" id="profilePhotoFileUpload"  >
+  <input type="button" onclick='uploadfile()'>upload</input>
+  <script type="text/javascript">
+    Bmob.initialize("6939cca7f50b0f983ad317727a913cd3", "f4a3cd1e8ab7ec01cf87897cebd94798");
+
+    function uploadfile(){
+
+      var fileUploadControl = $("#profilePhotoFileUpload")[0];
+      if (fileUploadControl.files.length > 0) {
+        var file = fileUploadControl.files[0];
+        var name = "qq图片.jpg";
+
+        var file = new Bmob.File(name, file);
+        
+        file.save().then(function(obj) {
+
+          var GameScore = Bmob.Object.extend("PlaceObject");
+          var gameScore = new GameScore();
+          gameScore.set("test", obj);
+          gameScore.save(null, {
+            success: function(GameScoretest) {
+              // Now let's update it with some new data. In this case, only cheatMode and score
+              // will get sent to the cloud. playerName hasn't changed.
+              
+            }
+          });
+
+          //alert(obj.url());
+        }, function(error) {
+          // the save failed.
+        });
+      }
+    }
+
+	/*
+	 Bmob.User.logIn("jeff", "1111111", {
+          success: function(user) {
+            alert("succ");
+          },
+          error: function(user, error) {
+            alert("fail");
+          }
+        });
+	*/
+	
+    /*
+    //创建对象
+    var TestObject = Bmob.Object.extend("GameScoretesttest");
+    var testObject = new TestObject();
+      testObject.save({foo: "bar"}, {
+      success: function(object) {
+        $(".success").show();
+      },
+      error: function(model, error) {
+        $(".error").show();
+      }
+    });
+    */
+
+/*
+ //update
+var GameScoretest = Bmob.Object.extend("GameScoretest");
+var GameScoretest = new GameScoretest();
+ 
+GameScoretest.set("score", 1337);
+GameScoretest.set("playerName", "Sean Plott");
+GameScoretest.set("cheatMode", false);
+GameScoretest.set("skills", ["pwnage", "flying"]);
+ 
+GameScoretest.save(null, {
+  success: function(GameScoretest) {
+    // Now let's update it with some new data. In this case, only cheatMode and score
+    // will get sent to the cloud. playerName hasn't changed.
+    GameScoretest.set("cheatMode", true);
+    GameScoretest.set("score", 1338);
+    GameScoretest.save();
+  }
+})
+*/
+
+
+
+/*
+// delete the object.
+var GameScoretest = Bmob.Object.extend("GameScoretest");
+var GameScoretest = new GameScoretest();
+ 
+GameScoretest.set("score", 1337);
+GameScoretest.set("playerName", "Sean Plott");
+GameScoretest.set("cheatMode", false);
+GameScoretest.set("skills", ["pwnage", "flying"]);
+ 
+GameScoretest.save(null, {
+  success: function(GameScoretest) {
+    // Now let's update it with some new data. In this case, only cheatMode and score
+    // will get sent to the cloud. playerName hasn't changed.
+   GameScoretest.destroy({
+    success: function(GameScoretest) {
+    alert("delete success");
+    },
+    error: function(GameScoretest, error) {
+    alert("delete fail");
+    }
+});
+  }
+});
+*/
+
+/*
+//query object
+var GameScoretest = Bmob.Object.extend("GameScore");
+var query = new Bmob.Query(GameScoretest);
+query.equalTo("score", 1338);
+query.find({
+  success: function(results) {
+    alert("Successfully retrieved " + results.length + " scores.");
+   
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+}); 
+*/
+
+/*
+var GameScore = Bmob.Object.extend("PlaceObject");
+//创建查询对象，入口参数是对象类的实例
+var query = new Bmob.Query(GameScore);
+//查询单条数据，第一个参数是这条数据的objectId值
+query.get("9a93ded142", {
+  success: function(gameScore) {
+    // 查询成功，调用get方法获取对应属性的值
+    alert(gameScore.get("test")._url);
+  },
+  error: function(object, error) {
+    // 查询失败
+	alert("fail");
+  }
+});
+*/
+
+/*
+//user login
+Bmob.User.logIn("jeff", "111111", {
+  success: function(user) {
+    //alert(user.get("username"))
+  },
+  error: function(user, error) {
+    // The login failed. Check error to see why.
+  }
+});
+
+//current user
+var currentUser = Bmob.User.current();
+alert(currentUser.get("username"))
+*/
+
+/*
+//modify user
+Bmob.User.logIn("jeff", "111111", {
+  success: function(user) {
+    user.set("username", "another_username");
+            user.save(null, {
+              error: function(userAgain, error) {
+                // This will error, since the AV.User is not authenticated
+              }
+            });
+  },
+  error: function(user, error) {
+    // The login failed. Check error to see why.
+  }
+});
+*/
+
+/*
+//user signup
+var user = new Bmob.User();
+user.set("username", "my name11");
+user.set("password", "my pass");
+user.set("email", "email@example.com");
+
+// other fields can be set just like with AV.Object
+user.set("phone", "415-392-0202");
+
+user.signUp(null, {
+  success: function(user) {
+    // Hooray! Let them use the app now.
+  },
+  error: function(user, error) {
+    // Show the error message somewhere and let the user try again.
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+*/
+
+
+
+//save file
+/*
+var bytes = "Hello, World!";
+var file = new Bmob.File("hello.txt", bytes);
+file.save().then(function(obj) {
+  // the object was saved successfully.
+  //alert(obj.url());
+  obj.destroy();
+}, function(error) {
+  // the save failed.
+});
+*/
+
+/*
+// add releation
+var Post = Bmob.Object.extend("Postw");
+var Comment = Bmob.Object.extend("Commentw");
+
+// Create the post
+var myPost = new Post();
+myPost.set("title", "I m Hungry");
+myPost.set("content", "Where should we go for lunch?");
+
+// Create the comment
+var myComment = new Comment();
+myComment.set("content", "Let's do Sushirrito.");
+
+// Add the post as a value in the comment
+myComment.set("parent", myPost);
+
+// This will save both myPost and myComment
+myComment.save();
+*/
+
+/*
+//add duo duo relation
+var Post = Bmob.Object.extend("Postw");
+
+// Create the post
+var myPost = new Post();
+myPost.set("title", "I m Hungry");
+myPost.set("content", "Where should we go for lunch?");
+myPost.save();
+
+myPost.save(null, {
+  success: function(myPost) {
+   
+    Bmob.User.logIn("jeff", "111111", {
+      success: function(user) {
+        //alert(user.get("username"))
+      },
+      error: function(user, error) {
+        // The login failed. Check error to see why.
+      }
+    });
+
+    //current user
+    var currentUser = Bmob.User.current();
+    var relation = currentUser.relation("likes");
+    relation.add(myPost);
+    currentUser.save();
+  }
+});
+*/
+
+
+/*
+//duo duo relation
+var Post = Bmob.Object.extend("Postw");
+
+// Create the post
+var myPost = new Post();
+myPost.set("title", "I m Hungry");
+myPost.set("content", "Where should we go for lunch?");
+myPost.save();
+
+myPost.save(null, {
+  success: function(myPost) {
+   
+   //add duo duo relation
+    var Post = Bmob.Object.extend("Postw");
+
+    // Create the post
+    var myPost1 = new Post();
+    myPost1.set("title", "I m Hungry");
+    myPost1.set("content", "Where should we go for lunch?");
+    myPost1.save();
+
+    myPost1.save(null, {
+      success: function(myPost1) {
+       
+        Bmob.User.logIn("jeff", "111111", {
+          success: function(user) {
+            //alert(user.get("username"))
+          },
+          error: function(user, error) {
+            // The login failed. Check error to see why.
+          }
+        });
+
+        //current user
+        var currentUser = Bmob.User.current();
+        var relation = currentUser.relation("likes");
+        // relation.add(myPost);
+        // relation.add(myPost1);
+        relation.add([myPost1,myPost]);
+        currentUser.save();     
+
+
+      }
+    });
+  }
+});
+*/
+
+/*
+ Bmob.User.logIn("jeff", "111111", {
+          success: function(user) {
+            //alert(user.get("username"))
+          },
+          error: function(user, error) {
+            // The login failed. Check error to see why.
+          }
+        });
+
+        //current user
+        var currentUser = Bmob.User.current();
+        var relation = currentUser.relation("likes");
+        relation.query().find({
+          success: function(list) {
+            
+          }
+        });
+*/
+
+/*
+
+//reset password
+ Bmob.User.requestPasswordReset("h6k65@126.com", {
+  success: function() {
+    // Password reset request was sent successfully
+  },
+  error: function(error) {
+    // Show the error message somewhere
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+*/
+
+
+/*
+//reset password
+ Bmob.User.requestEmailVerify("h6k65@126.com", {
+  success: function() {
+    // Password reset request was sent successfully
+  },
+  error: function(error) {
+    // Show the error message somewhere
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+*/
+
+
+
+
+
+/*
+var GameScore = AV.Object.extend("Postw");
+var query = new AV.Query(GameScore);
+query.get("65f33ca954", {
+  success: function(postw) {
+    // The object was retrieved successfully.
+    var relation = postw.relation("likes");
+    relation.add(myPost);
+    currentUser.save();
+  },
+  error: function(object, error) {
+    // The object was not retrieved successfully.
+    // error is a AV.Error with an error code and description.
+  }
+});
+*/
+
+/*
+//run cloud code
+Bmob.Cloud.run('test', {"name":"323424"}, {
+  success: function(result) {
+    alert(result);
+  },
+  error: function(error) {
+  }
+});
+*/
+
+/*
+//get image thumbnail
+Bmob.Image.thumbnail({"image":"http://f.bmob.cn/M00/01/26/wKgBP1OX9LLVh5gNAAHGYsmKRjk666.jpg","mode":0,"quality":100,"width":100}
+
+  ).then(function(obj) {
+
+  alert("filename:"+obj.filename); //
+  alert("url:"+obj.url); //
+});
+*/
+
+/*
+//get image thumbnail
+Bmob.Image.watermark({"image":"http://static.bmob.cn/new/images/banner005.jpg","watermark":"http://static.bmob.cn/new/images/header2.png","dissolve":100,"gravity":"SouthWest","distanceX":10,"distanceY":10}
+
+  ).then(function(obj) {
+
+  alert("filename:"+obj.filename); //
+  alert("url:"+obj.url); //
+});
+*/
+
+/*
+//save big object
+var number = 42;
+var string = "the number is " + number;
+var date = new Date();
+var array = [string, number];
+var object = { number: number, string: string };
+
+var BigObject = Bmob.Object.extend("BigObject");
+var bigObject = new BigObject();
+bigObject.set("myNumber", number);
+bigObject.set("myString", string);
+bigObject.set("myDate", date);
+bigObject.set("myArray", array);
+bigObject.set("myObject", object);
+bigObject.set("myNull", null);
+bigObject.save();
+*/
+
+
+/*
+//base query
+var GameScore = Bmob.Object.extend("GameScore");
+var query = new Bmob.Query(GameScore);
+// query.equalTo("playerName", "Sean Plott");
+// query.notEqualTo("playerName", "Michael Yabuti");
+// query.greaterThan("score", 1337);
+// query.skip(1); // skip the first 10 results
+// query.limit(1); // limit to at most 10 results
+// query.ascending("score");
+
+// query.lessThan("score", 1337);
+// query.lessThanOrEqualTo("score", 1337);
+// query.greaterThan("score", 1337);　
+// query.greaterThanOrEqualTo("score", 1337);
+query.descending("score");
+query.descending("score1");
+
+// query.containedIn("playerName",
+//                   ["Sean Plott", "Michael Yabuti"]);
+
+// query.exists("score");
+// query.doesNotExist("score");
+// query.containsAll("arrayKey", [2, 3, 4]);
+// query.startsWith("playerName", "Sea");
+
+query.find({
+  success: function(results) {
+    alert("Successfully retrieved " + results.length + " scores.");
+    // Do something with the returned Bmob.Object values
+    for (var i = 0; i < results.length; i++) {
+      var object = results[i];
+      // alert(object.id + ' - ' + object.get('playerName'));
+    }
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+// query.first({
+//   success: function(object) {
+//     alert(object.id);
+//     // Successfully retrieved the object.
+//   },
+//   error: function(error) {
+//     alert("Error: " + error.code + " " + error.message);
+//   }
+// });
+*/
+
+
+/*
+var Team = Bmob.Object.extend("Team");
+var teamQuery = new Bmob.Query(Team);
+teamQuery.greaterThan("winPct", 0.5);
+var userQuery = new Bmob.Query(Bmob.User);
+// userQuery.matchesKeyInQuery("hometown", "city", teamQuery);
+userQuery.doesNotMatchKeyInQuery("hometown", "city", teamQuery);
+userQuery.find({
+  success: function(results) {
+    // results has the list of users with a hometown team with a winning record
+  }
+});
+*/
+
+
+/*
+var GameScore = Bmob.Object.extend("GameScore");
+var query = new Bmob.Query(GameScore);
+query.select("score", "playerName");
+query.find().then(function(results) {
+  // each of results will only have the selected fields available.
+});
+*/
+
+/*
+var GameScore = Bmob.Object.extend("GameScore");
+var query = new Bmob.Query(GameScore);
+query.get("08ae3c768e", {
+  success: function(gameScore) {
+    // The object was retrieved successfully.
+    var comment = Bmob.Object.extend("Comment");
+    var query = new Bmob.Query(comment);
+    query.equalTo("post", gameScore);
+    query.find({
+      success: function(comments) {
+        // comments now contains the comments for myPost
+      }
+    });
+  },
+  error: function(object, error) {
+    // The object was not retrieved successfully.
+    // error is a AV.Error with an error code and description.
+  }
+});
+*/
+
+/*
+var GameScore = Bmob.Object.extend("GameScore");
+var query = new Bmob.Query(GameScore);
+query.equalTo("playerName", "Sean Plott");
+query.count({
+  success: function(count) {
+    // The count request succeeded. Show the count
+    alert("Sean has played " + count + " games");
+  },
+  error: function(error) {
+    // The request failed
+  }
+});
+*/
+
+
+/*
+var lotsOfWins = new Bmob.Query("Player");
+lotsOfWins.greaterThan("wins", 150);
+
+var fewWins = new Bmob.Query("Player");
+fewWins.lessThan("wins", 5);
+
+var mainQuery = Bmob.Query.or(lotsOfWins, fewWins);
+mainQuery.find({
+  success: function(results) {
+     // results contains a list of players that either have won a lot of games or won only a few games.
+  },
+  error: function(error) {
+    // There was an error.
+  }
+});
+*/
+
+/*
+var TestObject = Bmob.Object.extend("GameScore");
+
+// var TestCollection = Bmob.Collection.extend({
+//   model: TestObject
+// });
+// var collection = new TestCollection();
+
+// var TestCollection = Bmob.Collection.extend({
+//   model: TestObject,
+//   query: (new Bmob.Query(TestObject)).equalTo("playerName", "Sean Plott")
+// });
+// var collection = new TestCollection();
+
+var query = new Bmob.Query(TestObject);
+query.equalTo("playerName", "Sean Plott");
+var collection = query.collection();
+
+// collection.comparator = function(object) {
+//   return object.get("score");
+// };
+
+collection.fetch({
+  success: function(collection) {
+    collection.each(function(object) {
+      alert(object.id);
+    });
+  },
+  error: function(collection, error) {
+    // The collection could not be retrieved.
+  }
+});
+*/
+
+
+/*
+var TestObject = Bmob.Object.extend("Postw");
+var TestCollection = Bmob.Collection.extend({
+  model: TestObject
+});
+var collection = new TestCollection();
+
+collection.add([
+  {"name": "Duke"},
+  {"name": "Scarlett"}
+]);
+
+// Get the "Duke" AV.Object by its sorted position.
+var model = collection.at(0);
+
+// Or you can get it by AVOS Cloud objectId.
+var modelAgain = collection.get(model.id);
+
+// Remove "Duke" from the collection.
+collection.remove(model);
+
+// Completely replace all items in the collection.
+collection.reset([
+  {"name": "Hawk"},
+  {"name": "Jane"}
+]);
+*/
+
+
+/*
+var roleACL = new Bmob.ACL();
+roleACL.setPublicReadAccess(true);
+var role = new Bmob.Role("test", roleACL);
+role.save();
+*/
+
+
+/*
+//set role and user for acl
+
+Bmob.User.logIn("jeff", "111111", {
+  success: function(user) {
+    //alert(user.get("username"))
+  },
+  error: function(user, error) {
+    // The login failed. Check error to see why.
+  }
+});
+
+//current user
+var currentUser = Bmob.User.current();
+var query = new Bmob.Query(Bmob.Role);
+query.get("dc134be463", {
+  success: function(roleOld) {
+    var roleACL = new Bmob.ACL();
+    roleACL.setPublicReadAccess(true);
+    var role = new Bmob.Role("test1", roleACL);
+    role.getUsers().add(currentUser);
+    role.getRoles().add(roleOld);
+    role.save();
+  },
+  
+});
+*/
+
+/*
+//set object acl by fetch object
+var query = new Bmob.Query(Bmob.Role);
+query.get("dc134be463", {
+  success: function(roleOld) {
+
+    var Post = Bmob.Object.extend("Postw");
+
+    // Create the post
+    var myPost = new Post();
+    var postACL = new Bmob.ACL();
+    postACL.setRoleWriteAccess(roleOld,true);
+    myPost.set("title", "I m Hungry");
+    myPost.set("content", "Where should we go for lunch?");
+    myPost.setACL(postACL);   
+    myPost.save();
+
+  },
+  
+});
+
+*/
+
+
+/*
+//set object acl by role name
+    var Post = Bmob.Object.extend("Postw");
+
+    // Create the post
+    var myPost = new Post();
+    var postACL = new Bmob.ACL();
+    postACL.setRoleWriteAccess("test", true);
+    myPost.set("title", "I m Hungry");
+    myPost.set("content", "Where should we go for lunch?");
+    myPost.setACL(postACL);   
+    myPost.save();
+*/
+
+
+/*
+//query object
+var GameScoretest = Bmob.Object.extend("GameScoretest");
+var query = new Bmob.Query(GameScoretest);
+query.get("bc5da708dc",{
+  success: function(gameScore) {
+    // alert(obj.get("content"));
+    gameScore.remove("skills","test");
+    gameScore.save();
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+}); 
+*/
+
+
+/*
+//add geo object
+var point = new Bmob.GeoPoint({latitude: 40.0, longitude: 30.0});
+var PlaceObj = Bmob.Object.extend("PlaceObj");
+// Create the post
+var placeObj = new PlaceObj();
+placeObj.set("name", "guangzhou");
+placeObj.set("location", point);
+placeObj.save();
+*/
+
+
+/*
+//query near home
+var PlaceObj = Bmob.Object.extend("PlaceObj");
+var placeObj = new Bmob.Query(PlaceObj);
+placeObj.get("9eccf27cc9",{
+  success: function(placeObj) {
+    var userGeoPoint = placeObj.get("location");
+    // Create a query for places
+    var query = new AV.Query(PlaceObject);
+    // Interested in locations near user.
+    query.near("location", userGeoPoint);
+    // Limit what could be a lot of points.
+    query.limit(10);
+    // Final list of objects
+    query.find({
+      success: function(placesObjects) {
+
+      }
+    });
+  },
+  error: function(error) {
+    alert("Error: " + error.code + " " + error.message);
+  }
+}); 
+*/
+
+/*
+var PlaceObj = Bmob.Object.extend("PlaceObj");
+var southwestOfSF = new Bmob.GeoPoint(20, 20);
+var northeastOfSF = new Bmob.GeoPoint(50, 50);
+
+var query = new Bmob.Query(PlaceObj);
+query.withinGeoBox("location", southwestOfSF, northeastOfSF);
+query.find({
+  success: function(placeObj) {
+    
+  }
+});
+*/
+
+/*
+//push notifiaton
+Bmob.Push.send({
+  channels: [ "Public" ],
+  data: {
+     alert: "Public message"
+  }
+});
+*/
+
+
+//send sms
+/*
+Bmob.Sms.requestSms({"mobilePhoneNumber": "131xxxxxxxx","content": "您的验证码是：222222, 有效期是10分钟。"} ).then(function(obj) {
+  alert("smsId:"+obj.smsId); //
+}, function(err){
+  alert("发送失败:"+err);
+});
+*/
+
+//send sms
+/*
+Bmob.Sms.requestSmsCode({"mobilePhoneNumber": "131xxxxxxxx"} ).then(function(obj) {
+  alert("smsId:"+obj.smsId); //
+}, function(err){
+  alert("发送失败:"+err);
+});
+*/
+
+//verify sms code
+/*
+Bmob.Sms.verifySmsCode("131xxxxxxxx", 125466).then(function(obj) {
+  alert("msg:"+obj.msg); //
+}, function(err){
+  alert("发送失败:"+err);
+});
+*/
+
+//query msg
+/*
+Bmob.Sms.querySms(6817361).then(function(obj) {
+  alert("status:"+obj.sms_state); //
+}, function(err){
+  alert("发送失败:"+err);
+});
+*/
+
+//调整到支付宝的付款界面
+/*
+Bmob.Pay.webPay(0.01, "充值", "给应用充值0.01元").then(function(obj) {
+  // <div id="pay_content"></div>
+  //pay_content是一个空div，运行跳转到支付宝的js代码
+  $("#pay_content").html(obj.html);
+}, function(err){
+  alert("发送失败:"+err);
+});
+*/
+
+//查询订单
+Bmob.Pay.queryOrder(435434).then(function(obj) {
+   alert("status:"+obj.name); //
+}, function(err){
+  alert("发送失败:"+err);
+});
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>
